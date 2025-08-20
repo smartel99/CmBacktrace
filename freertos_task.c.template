@@ -7,15 +7,20 @@ uint32_t * vTaskStackAddr()
 
 uint32_t vTaskStackSize()
 {
-    #if ( portSTACK_GROWTH > 0 )
+#if (configRECORD_STACK_HIGH_ADDRESS == 1)
+#    if (portSTACK_GROWTH > 0)
 
-    #error "portSTACK_GROWTH > 0 not supported!"
+#        error "portSTACK_GROWTH > 0 not supported!"
 
-    #else /* ( portSTACK_GROWTH > 0 )*/
+#    else /* ( portSTACK_GROWTH > 0 )*/
 
     return (pxCurrentTCB->pxEndOfStack - pxCurrentTCB->pxStack + 1);
 
-    #endif /* ( portSTACK_GROWTH > 0 )*/
+#    endif /* ( portSTACK_GROWTH > 0 )*/
+#else
+#    error "configRECORD_STACK_HIGH_ADDRESS needs to be enabled!"
+    return 0;
+#endif
 }
 
 char * vTaskName()
